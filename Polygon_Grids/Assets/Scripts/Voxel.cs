@@ -24,7 +24,8 @@ public class Voxel : MonoBehaviour {
 
     //The Mesh Filter takes a mesh from your assets and passes it to the Mesh Renderer for rendering on the screen
     //One Voxel can contain different meshes which are the representation of different types of voxels
-    public MeshFilter type0mesh, type1Mesh, type2Mesh, type3Mesh;
+
+    public MeshFilter[]meshType;
 
     //variable to store a type for this voxel
 	int type;
@@ -56,25 +57,9 @@ public class Voxel : MonoBehaviour {
 
         //gets the type of this voxel and sets the mesh filter by type - allows us to preload
         //different meshes and render a different mesh for different voxels based on the type
-		type = _type;
-		switch (type) {
-		case 1:
-			MeshFilter setMesh = gameObject.GetComponent<MeshFilter> ();
-			setMesh = type1Mesh;
-			break;
-		case 2:
-			MeshFilter setMesh2 = gameObject.GetComponent<MeshFilter> ();
-			setMesh2 = type2Mesh;
-			break;
-		case 3:
-			MeshFilter setMesh3 = gameObject.GetComponent<MeshFilter> ();
-			setMesh3 = type3Mesh;
-			break;	
-		default:
-			MeshFilter setMeshDefault = gameObject.GetComponent<MeshFilter> ();
-			setMeshDefault = type3Mesh;
-			break;
-		}
+
+        gameObject.GetComponent<MeshFilter>().sharedMesh = meshType[_type].sharedMesh;
+
     }
 
 	// Update function

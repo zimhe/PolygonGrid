@@ -12,10 +12,13 @@ public class PolygonGrids : MonoBehaviour
     [SerializeField ]
     private Texture2D image;
 
-    private float scaleX ;
+    private float scaleX;
 
     [SerializeField]
     private float scaleY=1f;
+
+    [SerializeField]
+    private float scaleZ = 1f;
 
     [SerializeField ]
     private int CountY = 30;
@@ -28,10 +31,13 @@ public class PolygonGrids : MonoBehaviour
 
     private GOLRule RuleInUse = new GOLRule();
 
+    public int TimeEnd = 10;
+
+    int currentFrame = 1;
 
     void Awake()
     {
-        RuleInUse.setupRule(1, 2, 2, 3);
+        RuleInUse.setupRule(2, 3, 3, 4);
 
         scaleX = Mathf.Sqrt(Mathf.Pow(scaleY, 2) - Mathf.Pow(scaleY / 2, 2)); 
 
@@ -48,10 +54,9 @@ public class PolygonGrids : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-
+	    camPivot.position = new Vector3(CountX / 2, 10, CountY / 2);
         createPolygon();
-
-	    getPixelToScale();
+	    //getPixelToScale();
 	    getPixelToState() ;
 
 	}
@@ -59,13 +64,14 @@ public class PolygonGrids : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        //createPolygon();
+        if (currentFrame < TimeEnd)
+        {
+            calculatePoly();
 
-        calculatePoly();
+            UpdateDisplayVoxel();
 
-        UpdateDisplayVoxel();
-
-
+            MoveUp();
+        }
     }
 
     void createPolygon()
@@ -141,9 +147,9 @@ public class PolygonGrids : MonoBehaviour
                 int _y = Mathf.FloorToInt(currenPoly.position.z * _q);
 
                 float _t = image.GetPixel(_x, _y).grayscale;
-                print(_t);
+                
 
-                currenPoly.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.red, Color.green, _t);
+                //currenPoly.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.red, Color.green, _t);
 
                 if (_t <0.6f)
                 {
@@ -153,8 +159,6 @@ public class PolygonGrids : MonoBehaviour
                 {
                     currenPoly.GetComponent<Voxel>().SetState(1);
                 }
-
-              
             }
         }
     }
@@ -215,8 +219,39 @@ public class PolygonGrids : MonoBehaviour
             for (int j = 0; j < CountY; j++)
             {
                 Grid2d[i, j].GetComponent<Voxel>().UpdateVoxel();
-                Grid2d[i, j].GetComponent<Voxel>().VoxelDisplay();
+                //Grid2d[i, j].GetComponent<Voxel>().VoxelDisplay();
             }
         }
+    }
+
+    void MoveUp()
+    {
+        for (int i = 0; i < CountX; i++)
+        {
+            for (int j = 0; j < CountY; j++)
+            {
+                int baseState = Grid2d[i, j].GetComponent<Voxel>().GetState();
+                if (baseState == 1)
+                {
+                    Vector3 L0 = Grid2d[i, j].position;
+
+                    Vector3 currentPosition = new Vector3(L0.x, currentFrame*scaleZ, L0.z);
+
+                    Quaternion currentRotation = Grid2d[i, j].rotation;
+
+                    Transform CurrenVoxel = Instantiate(Grid2d[i, j], currentPosition,currentRotation);
+
+                    CurrenVoxel.GetComponent<Voxel>().SetupVoxel(i,currentFrame,j,1);
+
+                    CurrenVoxel.GetComponent<Voxel>().SetState(1);
+
+                    //CurrenVoxel.GetComponent<Voxel>().UpdateVoxel();
+
+                    CurrenVoxel.GetComponent<Voxel>().VoxelDisplay();
+                }
+            }
+        }
+
+        currentFrame++;
     }
 }
