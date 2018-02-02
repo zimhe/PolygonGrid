@@ -303,7 +303,9 @@
     <Compile Include="Assets\Scripts\Camera\Orbit.cs" />
     <Compile Include="Assets\Scripts\Camera\Pan.cs" />
     <Compile Include="Assets\Scripts\Camera\Zoom.cs" />
+    <Compile Include="Assets\Scripts\GOLRule.cs" />
     <Compile Include="Assets\Scripts\PolygonGrids.cs" />
+    <Compile Include="Assets\Scripts\Voxel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
