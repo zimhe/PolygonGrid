@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Scene/PixelToMesh.unity
+  isLoaded: 1
+  isActive: 1
