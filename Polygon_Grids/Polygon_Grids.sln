@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polygon_Grids", "Polygon_Grids.csproj", "{B33ABF0C-5854-FCA3-DAD9-2DEBE4AFFA3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polygon_Grids.Plugins", "Polygon_Grids.Plugins.csproj", "{F90F9880-A9F9-0678-BDBA-AA8AB6B42646}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polygon_Grids.Editor.Plugins", "Polygon_Grids.Editor.Plugins.csproj", "{1914D0CB-061E-653E-8099-E663C0FCAECB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{B33ABF0C-5854-FCA3-DAD9-2DEBE4AFFA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B33ABF0C-5854-FCA3-DAD9-2DEBE4AFFA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B33ABF0C-5854-FCA3-DAD9-2DEBE4AFFA3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F90F9880-A9F9-0678-BDBA-AA8AB6B42646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90F9880-A9F9-0678-BDBA-AA8AB6B42646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90F9880-A9F9-0678-BDBA-AA8AB6B42646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90F9880-A9F9-0678-BDBA-AA8AB6B42646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1914D0CB-061E-653E-8099-E663C0FCAECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1914D0CB-061E-653E-8099-E663C0FCAECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1914D0CB-061E-653E-8099-E663C0FCAECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1914D0CB-061E-653E-8099-E663C0FCAECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

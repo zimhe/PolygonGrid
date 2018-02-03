@@ -25,7 +25,7 @@ public class Voxel : MonoBehaviour {
     //The Mesh Filter takes a mesh from your assets and passes it to the Mesh Renderer for rendering on the screen
     //One Voxel can contain different meshes which are the representation of different types of voxels
 
-    public MeshFilter[]meshType;
+    public MeshFilter []meshType;
 
     //variable to store a type for this voxel
 	int type;
@@ -45,7 +45,7 @@ public class Voxel : MonoBehaviour {
 
     // FUNCTIONS
 
-    public void SetupVoxel(int i, int j, int k, int _type)
+    public void SetupVoxel(float  i, float  j, float k, int _type)
     {
         //set reference to time end 
         props = new MaterialPropertyBlock();
@@ -235,10 +235,10 @@ public class Voxel : MonoBehaviour {
         {
             // Set Color
             Color col = new Color(1f, 0.9f, 0.48f, 1);
-            props.SetColor("_Color", col);
+            //props.SetColor("_Color", col);
             // Updated the mesh renderer color
             renderer.enabled = true;
-            renderer.SetPropertyBlock(props);
+            renderer.material .color =col;
         }
 
         if (state == 0)
