@@ -97,6 +97,6 @@ MonoBehaviour:
   renderer: {fileID: 0}
   address: {x: 0, y: 0, z: 0}
   meshType:
-  - {fileID: 33359757496228182, guid: f8b9942f84cdf4041a55693fb0f9e0bb, type: 2}
+  - {fileID: 33435541458882258, guid: fc66fecc4957bf3419615af968978d55, type: 2}
   - {fileID: 33435541458882258, guid: fc66fecc4957bf3419615af968978d55, type: 2}
   - {fileID: 33405009708855118}

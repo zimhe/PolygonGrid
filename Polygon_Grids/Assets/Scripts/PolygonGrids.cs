@@ -56,8 +56,8 @@ public class PolygonGrids : MonoBehaviour
 	{
 	    camPivot.position = new Vector3(CountX / 2, 10, CountY / 2);
         createPolygon();
-	    //getPixelToScale();
-	    getPixelToState() ;
+	    getPixelToScale();
+	    //getPixelToState() ;
 
 	}
 	
@@ -66,11 +66,11 @@ public class PolygonGrids : MonoBehaviour
     {
         if (currentFrame < TimeEnd)
         {
-            calculatePoly();
+            //calculatePoly();
 
-            UpdateDisplayVoxel();
+            //UpdateDisplayVoxel();
 
-            MoveUp();
+            //MoveUp();
         }
     }
 
@@ -119,13 +119,25 @@ public class PolygonGrids : MonoBehaviour
 
             float _t = image.GetPixel(_x, _y).grayscale;
 
-           Vector3 toScale = currenPoly.localScale*_t;
+            Vector3 toScale = currenPoly.localScale*_t;
 
-            currenPoly .localScale = toScale;
+            float _ScaleY = 1000 * _t;
 
-            currenPoly.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.red , Color.green , _t);
+            Vector3 toScaleY = new Vector3( currenPoly.localScale.x,_ScaleY ,currenPoly .localScale.z);
 
+            currenPoly.GetComponent<Voxel>().SetupVoxel(_x, 0, _y, 0);
 
+            currenPoly.GetComponent<Voxel>().SetState(1);
+
+            //currenPoly .localScale = toScale;
+
+            currenPoly.localScale = toScaleY;
+
+            currenPoly.GetComponent<MeshRenderer>().enabled = true;
+
+            currenPoly.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.black  , Color.white  , _t);
+
+            //currenPoly.GetComponent<MeshRenderer>().material.color = Color.white;
         }
     }
 

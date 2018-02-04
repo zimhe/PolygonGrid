@@ -142,10 +142,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camPivot: {fileID: 1882599854}
   Prefab: {fileID: 4893186890128186, guid: b4e394f2091713743adde05d5e94b01a, type: 2}
-  image: {fileID: 2800000, guid: 147c76bac8da56a4e87cd657096b73c1, type: 3}
+  image: {fileID: 2800000, guid: f54047d38d73e3d4888c51e54709547f, type: 3}
   scaleY: 1
   scaleZ: 0.5
-  CountY: 40
+  CountY: 200
   TimeEnd: 5
 --- !u!4 &1874069839
 Transform:
