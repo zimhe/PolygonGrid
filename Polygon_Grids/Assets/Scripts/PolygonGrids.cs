@@ -51,16 +51,15 @@ public class PolygonGrids : MonoBehaviour
         var _ratio2 = scaleY / scaleX;
 
         CountX = Mathf.FloorToInt(CountY * _ratio*_ratio2)+2;
-
-       
     }
 
 	// Use this for initialization
 	void Start ()
 	{
-	    camPivot.position = new Vector3(CountX / 2, 10, CountY / 2);
+	   
+        camPivot.position = new Vector3(CountX / 2, 10, CountY / 2);
         createPolygon();
-	   // getPixelToScale();
+	    //getPixelToScale();
 	    getPixelToState();
 	}
 	
@@ -77,43 +76,49 @@ public class PolygonGrids : MonoBehaviour
         }
         if (currentFrame < TimeEnd)
         {
-            finalDisplay();
+           finalDisplay();
         }
     }
 
     void createPolygon()
     {
-
         int index = 0;
-        polyGrid = new Transform[CountX * CountY];
+
+        polyGrid = new Transform[CountX * CountY*TimeEnd];
         Grid2d = new Transform[CountX, CountY];
+        Grid3d = new Transform[CountX, CountY, TimeEnd];
+
         for (int i = 0; i < CountX; i++)
         {
-            for (int j = 0; j < CountY; j++,index++)
+            for (int j = 0; j < CountY; j++)
             {
-                var polygon = Instantiate(Prefab, transform);
-                var _p1 = new Vector3(i * scaleX, 0, j * scaleY);
-                var _p2 = new Vector3(i * scaleX, 0, j * scaleY + scaleY / 2);
-
-                polygon.name ="X_"+ i.ToString() + " , " +"Y_"+ j.ToString();
-                if (i % 2 == 0)
+                for (int k = 0; k < TimeEnd; k++, index++)
                 {
-                    polygon.localPosition = _p1;
-                }
-                else
-                {
-                    polygon.localPosition = _p2;
-                }
-                polyGrid[index] = polygon;
+                    var polygon = Instantiate(Prefab, transform);
+                    var _p1 = new Vector3(i * scaleX, k* scaleZ, j * scaleY);
+                    var _p2 = new Vector3(i * scaleX, k*scaleZ , j * scaleY + scaleY / 2);
 
-                Grid2d[i, j] = polygon;
+                    polygon.name = "X_" + i.ToString() + " , " + "Y_" + j.ToString();
+                    if (i % 2 == 0)
+                    {
+                        polygon.localPosition = _p1;
+                    }
+                    else
+                    {
+                        polygon.localPosition = _p2;
+                    }
+                    polygon.GetComponent<MeshRenderer>().enabled = false;
+
+                    polyGrid[index] = polygon;
+                    Grid3d[i, j,k] = polygon;
+                }
             }
         }
     }
 
     void getPixelToScale()
     {
-        int v = polyGrid.Length;
+        int v = CountX * CountX;
         //int W =Mathf.FloorToInt( polyGrid[v - 1].position.x);
         int H =Mathf.FloorToInt( CountY *scaleY);
         float _q = image.height / H;
@@ -130,7 +135,9 @@ public class PolygonGrids : MonoBehaviour
 
             currenPoly .localScale = toScale;
 
-           // currenPoly.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.red , Color.green , _t);
+            currenPoly.GetComponent<MeshRenderer>().enabled =true;
+
+            currenPoly.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.red , Color.green , _t);
         }
     }
 
@@ -145,11 +152,11 @@ public class PolygonGrids : MonoBehaviour
         {
             for (int j = 0; j < CountY; j++)
             {
-                Transform currenPoly = Grid2d [i, j];
+                Transform currentPoly = Grid3d [i, j,0];
 
-                currenPoly.GetComponent<Voxel>().SetupVoxel(i, 0, j, 1);
-                int _x = Mathf.FloorToInt(currenPoly.position.x * _q);
-                int _y = Mathf.FloorToInt(currenPoly.position.z * _q);
+                //currenPoly.GetComponent<Voxel>().SetupVoxel(i, 0, j, 1);
+                int _x = Mathf.FloorToInt(currentPoly.position.x * _q);
+                int _y = Mathf.FloorToInt(currentPoly.position.z * _q);
 
                 float _t = image.GetPixel(_x, _y).grayscale;
                 
@@ -158,11 +165,11 @@ public class PolygonGrids : MonoBehaviour
 
                 if (_t <0.6f)
                 {
-                    currenPoly.GetComponent<Voxel>().SetState(0);
+                    currentPoly.GetComponent<Voxel>().SetState(0);
                 }
                 else
                 {
-                    currenPoly.GetComponent<Voxel>().SetState(1);
+                    currentPoly.GetComponent<Voxel>().SetState(1);
                 }
             }
         }
@@ -174,15 +181,16 @@ public class PolygonGrids : MonoBehaviour
         {
             for (int j = 1; j < CountY-1; j++)
             {
-                Transform currentPoly = Grid2d[i, j];
+                Transform currentPoly = Grid3d[i, j,0];
+
                 int currentState = currentPoly.GetComponent<Voxel>().GetState();
 
-                int n0 = Grid2d[i - 1, j].GetComponent<Voxel>().GetState();
-                int n1 = Grid2d[i - 1, j + 1].GetComponent<Voxel>().GetState();
-                int n2 = Grid2d[i , j - 1].GetComponent<Voxel>().GetState();
-                int n3 = Grid2d[i , j + 1].GetComponent<Voxel>().GetState();
-                int n4 = Grid2d[i +1, j ].GetComponent<Voxel>().GetState();
-                int n5 = Grid2d[i +1, j + 1].GetComponent<Voxel>().GetState();
+                int n0 = Grid3d[i - 1, j,0].GetComponent<Voxel>().GetState();
+                int n1 = Grid3d[i - 1, j + 1,0].GetComponent<Voxel>().GetState();
+                int n2 = Grid3d[i , j - 1,0].GetComponent<Voxel>().GetState();
+                int n3 = Grid3d[i , j + 1,0].GetComponent<Voxel>().GetState();
+                int n4 = Grid3d[i +1, j ,0].GetComponent<Voxel>().GetState();
+                int n5 = Grid3d[i +1, j + 1,0].GetComponent<Voxel>().GetState();
 
                 int currentNeighborCount = n0 + n1 + n2 + n3 + n4 + n5;
 
@@ -190,8 +198,6 @@ public class PolygonGrids : MonoBehaviour
                 int Ins1 = RuleInUse.getInstruction(1);
                 int Ins2 = RuleInUse.getInstruction(2);
                 int Ins3 = RuleInUse.getInstruction(3);
-
-               
 
                 if (currentState == 1)
                 {
@@ -229,7 +235,7 @@ public class PolygonGrids : MonoBehaviour
         {
             for (int j = 0; j < CountY; j++)
             {
-                Grid2d[i, j].GetComponent<Voxel>().UpdateVoxel();
+                Grid3d[i, j,0].GetComponent<Voxel>().UpdateVoxel();
                 //Grid2d[i, j].GetComponent<Voxel>().VoxelDisplay();
             }
         }
@@ -237,30 +243,17 @@ public class PolygonGrids : MonoBehaviour
 
     void MoveUp()
     {
-        Grid3d = new Transform[CountX, CountY, TimeEnd];
         for (int i = 0; i < CountX; i++)
         {
             for (int j = 0; j < CountY; j++)
             {
-                int baseState = Grid2d[i, j].GetComponent<Voxel>().GetState();
-                if (baseState == 1)
-                {
-                    Vector3 L0 = Grid2d[i, j].position;
+                int currentState = Grid3d[i, j,0].GetComponent<Voxel>().GetState();
+                //if (baseState == 1)
 
-                    Vector3 currentPosition = new Vector3(L0.x, currentFrame*scaleZ, L0.z);
+                Grid3d[i, j, currentFrame].GetComponent< Voxel >().SetState(currentState);
 
-                    Quaternion currentRotation = Grid2d[i, j].rotation;
-
-                    Transform CurrentVoxel = Instantiate(Grid2d[i, j], currentPosition,currentRotation);
-
-                    //CurrentVoxel.GetComponent<Voxel>().SetupVoxel(i,currentFrame,j,0);
-
-                   // CurrentVoxel.GetComponent<Voxel>().SetState(1);
-
-                   // CurrentVoxel.GetComponent<Voxel>().VoxelDisplay();
-
-                    Grid3d[i, j, currentFrame] = CurrentVoxel;
-                }
+               // Grid3d[i, j, currentFrame].GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 0);
+                //Grid3d[i, j, currentFrame].GetComponent<Voxel>().VoxelDisplay();
             }
         }
         currentFrame++;
@@ -408,72 +401,28 @@ public class PolygonGrids : MonoBehaviour
                 {
                     Transform currentPoly = Grid3d[i, j,k];
 
-                    if (currentPoly == null)
+                    int currentState = currentPoly.GetComponent<Voxel>().GetState();
+
+                    int n0, n1, n2, n3, n4, n5;
+                    if (currentState == 1)
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        int n0, n1, n2, n3, n4, n5;
-                        if (Grid2d[i - 1, j] != null)
-                        {
-                            n0 = Grid2d[i - 1, j].GetComponent<Voxel>().GetState();
-                        }
-                        else
-                        {
-                            n0 = 0;
-                        }
-                        if (Grid2d[i - 1, j + 1] != null)
-                        {
-                            n1 = Grid2d[i - 1, j + 1].GetComponent<Voxel>().GetState();
-                        }
-                        else
-                        {
-                            n1 = 0;
-                        }
-                        if (Grid2d[i, j - 1] != null)
-                        {
-                            n2 = Grid2d[i, j - 1].GetComponent<Voxel>().GetState();
-                        }
-                        else
-                        {
-                            n2 = 0;
-                        }
-                        if (Grid2d[i, j + 1] != null)
-                        {
-                            n3 = Grid2d[i, j + 1].GetComponent<Voxel>().GetState();
-                        }
-                        else
-                        {
-                            n3 = 0;
-                        }
-                        if (Grid2d[i + 1, j] != null)
-                        {
-                            n4 = Grid2d[i + 1, j].GetComponent<Voxel>().GetState();
-                        }
-                        else
-                        {
-                            n4 = 0;
-                        }
-                        if (Grid2d[i + 1, j + 1] != null)
-                        {
-                            n5 = Grid2d[i + 1, j + 1].GetComponent<Voxel>().GetState();
-                        }
-                        else
-                        {
-                            n5 = 0;
-                        }
-                      
+                        n0 = Grid3d[i - 1, j,k].GetComponent<Voxel>().GetState();
+                        n1 = Grid3d[i - 1, j + 1,k].GetComponent<Voxel>().GetState();
+                        n2 = Grid3d[i, j - 1,k].GetComponent<Voxel>().GetState();
+                        n3 = Grid3d[i, j + 1,k].GetComponent<Voxel>().GetState();
+                        n4 = Grid3d[i + 1, j,k].GetComponent<Voxel>().GetState();
+                        n5 = Grid3d[i + 1, j + 1,k].GetComponent<Voxel>().GetState();
+
                         int currentNeighborCount = n0 + n1 + n2 + n3 + n4 + n5;
 
-                        if (currentNeighborCount ==0)
+                        if (currentNeighborCount == 0)
                         {
-                            Destroy(currentPoly.gameObject);
+                            currentPoly.GetComponent<Voxel>().SetState(0);
                         }
 
-                        if (currentNeighborCount==2)
+                        if (currentNeighborCount<=3)
                         {
-                            if (n2 == 1 && n3 == 1)
+                           /* if (n2 == 1 && n3 == 1)
                             {
                                 currentPoly.GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 1);
                             }
@@ -485,16 +434,17 @@ public class PolygonGrids : MonoBehaviour
                             {
                                 currentPoly.GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 3);
                             }
-                            else
+                            else*/
                             {
-                                currentPoly.GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 0);
+                                currentPoly.GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 4);
                             }
                         }
                         else
                         {
-                            currentPoly.GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 4);
+                            currentPoly.GetComponent<Voxel>().SetupVoxel(i, currentFrame, j, 0);
                         }
-                        currentPoly.GetComponent<Voxel>().SetState(1);
+
+                        currentPoly.GetComponent<MeshRenderer>().enabled = true;
                         currentPoly.GetComponent<Voxel>().VoxelDisplay();
                     }
                 }

@@ -145,8 +145,8 @@ MonoBehaviour:
   image: {fileID: 2800000, guid: 36dd0b22da8874ed38075789055ca664, type: 3}
   scaleY: 1
   scaleZ: 0.57
-  CountY: 60
-  TimeEnd: 10
+  CountY: 20
+  TimeEnd: 20
 --- !u!4 &1874069839
 Transform:
   m_ObjectHideFlags: 0
